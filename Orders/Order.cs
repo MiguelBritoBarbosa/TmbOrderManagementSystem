@@ -7,24 +7,22 @@
         public string Product { get; private set; }
         public double Value { get; private set; }
         public OrderStatus Status { get; private set; }
-        public DateTime CreatedAt { get; private set; }
+        public DateTimeOffset CreatedAt { get; private set; }
         public enum OrderStatus
         {
-            Pendente,
-            Processando,
-            Finalizado
+            Pending,
+            Processing,
+            Finished
         }
 
-        public Order(string client, string product, double value, OrderStatus status, DateTime createdAt)
+        public Order(string client, string product, double value)
         {
             Id = Guid.NewGuid();
             Client = client;
             Product = product;
             Value = value;
-            Status = status;
-            CreatedAt = createdAt;
+            Status = OrderStatus.Pending;
+            CreatedAt = DateTimeOffset.UtcNow;
         }
-
-
     }
 }
