@@ -1,0 +1,40 @@
+services:
+  database:
+    container_name: tmb-oms-database
+    image: postgres
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - tmb-oms:/var/lib/postgresql/data
+    networks:
+      - tmb-network
+
+  backend:
+    container_name: tmb-api
+    build: .
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=database;Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    networks:
+      - tmb-network
+    depends_on:
+      - database
+
+volumes:
+  tmb-oms:
+
+networks:
+  tmb-network:
+    name: TMB Network
+    driver: bridge
