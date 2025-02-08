@@ -1,6 +1,8 @@
+using TmbOrderManagementSystem.Api;
 using TmbOrderManagementSystem.Api.Orders;
-var builder = WebApplication.CreateBuilder(args);
+using DotNetEnv;
 
+var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
