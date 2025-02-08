@@ -1,6 +1,22 @@
-@TmbOrderManagementSystem.Api_HostAddress = http://localhost:5087
+@TmbOrderManagementSystem.Api_HostAddress = http://localhost:8080
 
-GET {{TmbOrderManagementSystem.Api_HostAddress}}/weatherforecast/
+POST {{TmbOrderManagementSystem.Api_HostAddress}}/orders
+Accept: application/json
+Content-type:application/json
+{
+  "client": "Fulano",
+  "product": "Curso JS",
+  "value": 1000
+}
+
+###
+
+GET {{TmbOrderManagementSystem.Api_HostAddress}}/orders
+Accept: application/json
+
+###
+
+GET {{TmbOrderManagementSystem.Api_HostAddress}}/orders/id
 Accept: application/json
 
 ###
