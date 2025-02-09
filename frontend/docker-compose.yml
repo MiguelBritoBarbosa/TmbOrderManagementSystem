@@ -1,0 +1,30 @@
+name: tmb-oms-frontend
+
+services:
+    frontend:
+        container_name: tmb-oms-frontend
+        build: .
+        image: miguelbritobarbosa/tmb-oms-frontend:latest
+        restart: always
+        env_file: .env
+        environment:
+            NEXT_PUBLIC_SITE_NAME: ${NEXT_PUBLIC_SITE_NAME}
+            NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
+            NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+            NODE_ENV: ${NODE_ENV}
+        volumes:
+            - ./src:/tmb-oms-frontend/src
+            - ./package.json:/tmb-oms-frontend/package.json
+            - ./package-lock.json:/tmb-oms-frontend/package-lock.json
+            - ./.env:/tmb-oms-frontend/.env
+            - ./public:/tmb-oms-frontend/public/
+        ports:
+            - "3000:3000"
+        networks:
+            - tmb-network
+
+networks:
+    tmb-network:
+        name: TMB Network
+        driver: bridge
+        external: false  # Declara que a rede será criada se não existir
