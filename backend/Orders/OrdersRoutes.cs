@@ -8,12 +8,15 @@ namespace TmbOrderManagementSystem.Api.Orders
         {
             var ordersRoutes = app.MapGroup("orders");
 
-            ordersRoutes.MapPost("", async (AddOrderRequest request, appDbContext context, CancellationToken ct) =>
+            ordersRoutes.MapPost("", async (AddOrderRequest request, appDbContext context, ServiceBusHelper serviceBusHelper, CancellationToken ct) =>
             {
                 var newOrder = new Order(request.client, request.product, request.value);
                 await context.Orders.AddAsync(newOrder);
                 await context.SaveChangesAsync(ct);
                 var orderResult = new OrderDto(newOrder.Id, newOrder.Client, newOrder.Product, newOrder.Value, newOrder.Status, newOrder.CreatedAt);
+
+                await serviceBusHelper.SendMessageQueue(newOrder);
+
                 return Results.Ok(orderResult);
             });
 

@@ -2,6 +2,7 @@ using TmbOrderManagementSystem.Api;
 using TmbOrderManagementSystem.Api.Orders;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
@@ -15,6 +16,8 @@ builder.Services.AddCors(option => option.AddDefaultPolicy(policy =>
 
 Env.Load();
 builder.Services.AddScoped<appDbContext>();
+builder.Services.AddSingleton<ServiceBusHelper>();
+builder.Services.AddScoped<OrderServiceBusConsumer>();
 
 var app = builder.Build();
 
@@ -38,7 +41,13 @@ if (applyMigration)
     }
 }
 
-// Orders Routes
 app.AddOrdersRoutes();
+
+using (var scope = app.Services.CreateScope())
+{
+    var serviceBusConsumer = scope.ServiceProvider.GetRequiredService<OrderServiceBusConsumer>();
+    var cancellationToken = app.Lifetime.ApplicationStopping;
+    await serviceBusConsumer.StartAsync(cancellationToken);
+}
 
 app.Run();

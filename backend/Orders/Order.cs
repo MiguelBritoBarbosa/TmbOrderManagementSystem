@@ -24,5 +24,11 @@
             Status = OrderStatus.Pending;
             CreatedAt = DateTimeOffset.UtcNow;
         }
+
+
+        public void setStatus(OrderStatus newStatus)
+        {
+            Status = newStatus;
+        }
     }
 }
