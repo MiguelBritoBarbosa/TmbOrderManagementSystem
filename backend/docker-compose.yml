@@ -1,3 +1,5 @@
+name: tmb-oms-backend
+
 services:
   database:
     container_name: tmb-oms-database
@@ -15,8 +17,9 @@ services:
       - tmb-network
 
   backend:
-    container_name: tmb-api
+    container_name: tmb-oms-backend
     build: .
+    image: miguelbritobarbosa/tmb-oms-backend:latest
     restart: always
     env_file:
       - .env
