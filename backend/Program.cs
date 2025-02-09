@@ -6,6 +6,12 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(option => option.AddDefaultPolicy(policy =>
+{
+    policy.AllowAnyOrigin();
+    policy.AllowAnyMethod();
+    policy.AllowAnyHeader();
+}));
 
 Env.Load();
 builder.Services.AddScoped<appDbContext>();
@@ -20,9 +26,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors();
 
 var applyMigration = builder.Configuration.GetValue<bool>("APPLY_MIGRATION");
-
 if (applyMigration)
 {
     using (var scope = app.Services.CreateScope())
