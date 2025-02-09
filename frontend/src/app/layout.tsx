@@ -3,6 +3,8 @@ import { Montserrat } from "next/font/google";
 import "@/styles/globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+import NprogressComponent from "@/config/nprogress";
+import '@/styles/nprogress.css';
 
 const montserrat = Montserrat({
     subsets: ['latin'],
@@ -25,6 +27,7 @@ export default function RootLayout({
             <body
                 className={`${montserrat.className}`}
             >
+                <NprogressComponent />
                 <SidebarProvider defaultOpen={true}>
                     <AppSidebar />
                     <main className="w-full">
