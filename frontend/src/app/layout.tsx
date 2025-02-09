@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "@/styles/globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar } from "@/components/appSidebar/app-sidebar";
 import NprogressComponent from "@/config/nprogress";
 import '@/styles/nprogress.css';
+import { Toaster } from "@/components/ui/toaster";
 
 const montserrat = Montserrat({
     subsets: ['latin'],
@@ -30,9 +31,10 @@ export default function RootLayout({
                 <NprogressComponent />
                 <SidebarProvider defaultOpen={true}>
                     <AppSidebar />
-                    <main className="w-full">
+                    <main className="w-full grid grid-rows-[min-content] p-4">
                         <SidebarTrigger />
                         {children}
+                        <Toaster />
                     </main>
                 </SidebarProvider>
             </body>
