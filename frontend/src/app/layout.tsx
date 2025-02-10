@@ -6,6 +6,7 @@ import { AppSidebar } from "@/components/appSidebar/app-sidebar";
 import NprogressComponent from "@/config/nprogress";
 import '@/styles/nprogress.css';
 import { Toaster } from "@/components/ui/toaster";
+import { Suspense } from "react";
 
 const montserrat = Montserrat({
     subsets: ['latin'],
@@ -28,7 +29,9 @@ export default function RootLayout({
             <body
                 className={`${montserrat.className}`}
             >
-                <NprogressComponent />
+                <Suspense>
+                    <NprogressComponent />
+                </Suspense>
                 <SidebarProvider defaultOpen={true}>
                     <AppSidebar />
                     <main className="w-full grid grid-rows-[min-content] p-4">
