@@ -68,23 +68,20 @@ export function DataTable<TData, TValue>({
                     </TableHeader>
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => {
-                                console.log(row)
-                                return (
-                                    <TableRow
-                                        key={row.id}
-                                        data-state={row.getIsSelected() && "selected"}
-                                    >
-                                        {row.getVisibleCells().map((cell) => (
-                                            <TableCell key={cell.id}>
-                                                <Link href={`/orders/${row.original.id}`}>
-                                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                                </Link>
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                )
-                            })
+                            table.getRowModel().rows.map((row: any) => (
+                                <TableRow
+                                    key={row.id}
+                                    data-state={row.getIsSelected() && "selected"}
+                                >
+                                    {row.getVisibleCells().map((cell: any) => (
+                                        <TableCell key={cell.id}>
+                                            <Link href={`/orders/${row.original.id}`}>
+                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                            </Link>
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            ))
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center">
