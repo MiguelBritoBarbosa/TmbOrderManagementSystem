@@ -12,6 +12,8 @@ namespace TmbOrderManagementSystem.Api.Orders
             {
                 var errors = request.Validate();
                 if (errors.Count > 0)
+                    return Results.BadRequest(errors);
+
                 var newOrder = new Order(request.client, request.product, request.value);
                 await context.Orders.AddAsync(newOrder);
                 await context.SaveChangesAsync(ct);
@@ -25,6 +27,7 @@ namespace TmbOrderManagementSystem.Api.Orders
             ordersRoutes.MapGet("", async (appDbContext context, CancellationToken ct) =>
             {
                 var orders = await context.Orders
+                .OrderByDescending(order => order.CreatedAt)
                 .Select(order => new OrderDto(order.Id, order.Client, order.Product, order.Value, order.Status, order.CreatedAt))
                 .ToListAsync(ct);
                 return orders;
