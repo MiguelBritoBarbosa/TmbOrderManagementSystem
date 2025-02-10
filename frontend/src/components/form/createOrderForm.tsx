@@ -31,7 +31,6 @@ export function CreateOrderForm() {
         }).nonempty(),
         value: z.preprocess((a: any) => {
             if (!a) {
-                console.log(a);
                 return a;
             }
             const rawValue = a.replace(/\D/g, "");
