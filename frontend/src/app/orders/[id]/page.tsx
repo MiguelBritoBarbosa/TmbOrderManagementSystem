@@ -2,13 +2,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { getOrder } from "@/config/data/orders/getOrder";
 import { formatOrders } from "@/config/domain/orders/formatOrders";
 
-export const dynamic = 'force-dynamic'
 
-export default async function Order({ params }: { params: { id: string } }) {
-    const order = await getOrder(params.id);
+export default async function Order({ params }: { params: Promise<{ id: string }> }) {
+    const order = await getOrder((await params).id);
     const formattedOrder = formatOrders([order])[0];
-
-    console.log(formattedOrder);
 
     return (
         <section className="w-full justify-self-center self-center grid items-center justify-items-center p-8 pb-20 gap-16 sm:p-20">
@@ -20,7 +17,7 @@ export default async function Order({ params }: { params: { id: string } }) {
                         <CardDescription>Order id {formattedOrder.id}</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <p className="leading-7 [&:not(:first-child)]:mt-6"><strong>buyer:</strong> {formattedOrder.client}</p>
+                        <p className="leading-7 [&:not(:first-child)]:mt-6"><strong>Buyer:</strong> {formattedOrder.client}</p>
                         <p className="leading-7 [&:not(:first-child)]:mt-6"><strong>Value:</strong> {formattedOrder.value}</p>
                     </CardContent>
                     <CardFooter>
