@@ -1,5 +1,5 @@
 import { Order } from '@/config/domain/orders/orders';
-import { API_URL } from '@/config/siteConfig';
+import { API_ROOT_URL } from '@/config/siteConfig';
 import { fetchJson } from '@/utils/featchJson';
 
 export async function postOrder(payload: {}): Promise<Order> {
