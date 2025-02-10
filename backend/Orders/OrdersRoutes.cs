@@ -10,6 +10,8 @@ namespace TmbOrderManagementSystem.Api.Orders
 
             ordersRoutes.MapPost("", async (AddOrderRequest request, appDbContext context, ServiceBusHelper serviceBusHelper, CancellationToken ct) =>
             {
+                var errors = request.Validate();
+                if (errors.Count > 0)
                 var newOrder = new Order(request.client, request.product, request.value);
                 await context.Orders.AddAsync(newOrder);
                 await context.SaveChangesAsync(ct);
