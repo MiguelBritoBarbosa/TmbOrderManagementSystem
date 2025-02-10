@@ -50,8 +50,8 @@ export function CreateOrderForm() {
         }
     });
 
-    const onSubmit = (values: z.infer<typeof FormSchema>) => {
-        const newOrder = postOrder(values);
+    const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+        const newOrder = await postOrder(values);
         if (!newOrder) {
             toast({
                 variant: "destructive",
