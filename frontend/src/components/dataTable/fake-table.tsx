@@ -16,10 +16,11 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Skeleton } from "../ui/skeleton"
+import { Order } from "@/config/domain/orders/orders"
 
 interface DataTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[]
-    data: TData[]
+    columns: ColumnDef<Order>[]
+    data: Order[]
 }
 
 export function FakeTable<TData, TValue>({
