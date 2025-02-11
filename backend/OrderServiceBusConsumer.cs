@@ -1,4 +1,5 @@
 ﻿using Azure.Messaging.ServiceBus;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using TmbOrderManagementSystem.Api.Orders;
@@ -11,11 +12,13 @@ namespace TmbOrderManagementSystem.Api
         private readonly ServiceBusClient client;
         private readonly ServiceBusProcessor processor;
         private readonly IServiceScopeFactory serviceScopeFactory;
+        private readonly IHubContext<OrderHub> hubContext;
 
-        public OrderServiceBusConsumer(IConfiguration config, IServiceScopeFactory scopeFactory)
+        public OrderServiceBusConsumer(IConfiguration config, IServiceScopeFactory scopeFactory, IHubContext<OrderHub> hub)
         {
             connectionString = config.GetValue<string>("AzureServiceBus") ?? "";
             serviceScopeFactory = scopeFactory;
+            hubContext = hub;
 
             client = new ServiceBusClient(connectionString);
             processor = client.CreateProcessor("order", new ServiceBusProcessorOptions());
@@ -48,12 +51,14 @@ namespace TmbOrderManagementSystem.Api
                     }
                     order.setStatus(Order.OrderStatus.Processing);
                     await context.SaveChangesAsync();
+                    await hubContext.Clients.All.SendAsync("ReceiveOrderUpdate", order);
                     Console.WriteLine($"Status alterado para 'Processing' para a ordem {order.Id}");
 
                     await Task.Delay(5000);
 
                     order.setStatus(Order.OrderStatus.Finished);
                     await context.SaveChangesAsync();
+                    await hubContext.Clients.All.SendAsync("ReceiveOrderUpdate", order);
                     Console.WriteLine($"Status alterado para 'Finished' para a ordem {order.Id}");
                 }
                 await args.CompleteMessageAsync(args.Message);

@@ -3,21 +3,24 @@ using TmbOrderManagementSystem.Api.Orders;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors(option => option.AddDefaultPolicy(policy =>
 {
-    policy.AllowAnyOrigin();
-    policy.AllowAnyMethod();
-    policy.AllowAnyHeader();
+    policy.SetIsOriginAllowed(_ => true)
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials();
 }));
 
 Env.Load();
 builder.Services.AddScoped<appDbContext>();
 builder.Services.AddSingleton<ServiceBusHelper>();
 builder.Services.AddScoped<OrderServiceBusConsumer>();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -42,6 +45,7 @@ if (applyMigration)
 }
 
 app.AddOrdersRoutes();
+app.MapHub<OrderHub>("/orderHub");
 
 using (var scope = app.Services.CreateScope())
 {
